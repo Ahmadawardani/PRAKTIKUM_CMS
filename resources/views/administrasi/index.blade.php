@@ -570,21 +570,21 @@
         <div class="quick-actions">
             <h2 class="section-title">Aksi Cepat</h2>
             <div class="quick-actions-grid">
-                <a href="#" class="quick-action-btn">
+                <a href="{{ route('keuangan.index') }}" class="quick-action-btn">
                     <span>📊</span>
                     Laporan Keuangan
                 </a>
-                <a href="#" class="quick-action-btn">
+                <a href="{{ route('persuratan.index') }}" class="quick-action-btn">
                     <span>📝</span>
                     Buat Surat Baru
                 </a>
-                <a href="#" class="quick-action-btn">
+                <a href="{{ route('anggota.index') }}" class="quick-action-btn">
                     <span>👥</span>
                     Kelola Anggota
                 </a>
                 <a href="#" class="quick-action-btn">
                     <span>⚙️</span>
-                    Pengaturan
+                    Kembali
                 </a>
             </div>
         </div>

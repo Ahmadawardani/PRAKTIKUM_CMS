@@ -397,6 +397,51 @@
             .main-content {
                 padding: 20px 0;
             }
+
+            /* Logout Button Style */
+.nav-links .btn-link.nav-link {
+    padding: 8px 0;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-links .btn-link.nav-link:hover {
+    color: var(--netflix-red) !important;
+    transform: translateY(-2px);
+}
+
+.nav-links .btn-link.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--netflix-red);
+    transition: width 0.3s ease;
+}
+
+.nav-links .btn-link.nav-link:hover::after {
+    width: 100%;
+}
+
+@media (max-width: 991.98px) {
+    .nav-links .btn-link.nav-link {
+        padding: 8px 0;
+        text-align: left;
+        width: 100%;
+    }
+    
+    .nav-links form {
+        width: 100%;
+    }
+}
+
+
         }
     </style>
     @stack('styles')
@@ -421,7 +466,22 @@
                     <a href="{{ route('anggota.index') }}" class="{{ request()->is('anggota*') ? 'active' : '' }}">Anggota</a>
                     <a href="{{ route('divisi.index') }}" class="{{ request()->is('divisi*') ? 'active' : '' }}">Divisi</a>
                     <a href="{{ route('kegiatan.index') }}" class="{{ request()->is('kegiatan*') ? 'active' : '' }}">Kegiatan</a>
+                    <a href="{{ route('administrasi.index') }}" class="{{ request()->is('administrasi*') ? 'active' : '' }}">Administrasi</a>
                     <a href="{{ url('/struktur') }}" class="{{ request()->is('struktur') ? 'active' : '' }}">Struktur</a>
+                        @auth
+    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-link nav-link" style="color: var(--light-gray);">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </button>
+    </form>
+    @endauth
+    
+    @guest
+    <a href="{{ route('login') }}" class="{{ request()->is('login') ? 'active' : '' }}">
+        <i class="fas fa-sign-in-alt me-1"></i> Login
+    </a>
+    @endguest
                 </div>
             </div>
         </div>

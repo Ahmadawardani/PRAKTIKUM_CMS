@@ -5,18 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use App\Models\Divisi;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AnggotaController extends Controller
 {
     public function index()
     {
-        $anggotas = Anggota::with('divisi')->get();
+        $anggotas = Anggota::with('divisi')
+            ->orderBy('id', 'asc')
+            ->get();
         return view('anggota.index', compact('anggotas'));
     }
 
-    public function show(Anggota $anggotum)
+    public function show($id)
     {
-        return view('anggota.show', ['anggota' => $anggotum]);
+        try {
+            $anggota = Anggota::findOrFail($id);
+            return view('anggota.show', ['anggota' => $anggota]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('anggota.index')
+                ->with('error', 'Anggota tidak ditemukan.');
+        }
     }
 
     public function create()
@@ -36,31 +45,55 @@ class AnggotaController extends Controller
 
         Anggota::create($request->all());
 
-        return redirect()->route('anggota.index')->with('success', 'Anggota berhasil ditambahkan.');
+        return redirect()->route('anggota.index')
+            ->with('success', 'Anggota berhasil ditambahkan.');
     }
 
-public function edit(Anggota $anggotum)
-{
-    $divisis = Divisi::all();
-    return view('anggota.edit', ['anggota' => $anggotum, 'divisis' => $divisis]);
-}
+    public function edit($id)
+    {
+        try {
+            $anggota = Anggota::findOrFail($id);
+            $divisis = Divisi::all();
+            return view('anggota.edit', ['anggota' => $anggota, 'divisis' => $divisis]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('anggota.index')
+                ->with('error', 'Anggota tidak ditemukan.');
+        }
+    }
 
-public function update(Request $request, Anggota $anggotum)
-{
-    $request->validate([
-        'NIM' => 'required|unique:anggotas,NIM,' . $anggotum->id,
-        'NAMA' => 'required',
-        'JABATAN' => 'required',
-        'DIVISI' => 'nullable|exists:divisis,id',
-    ]);
+    public function update(Request $request, $id)
+    {
+        try {
+            $anggota = Anggota::findOrFail($id);
+            
+            $request->validate([
+                'NIM' => 'required|unique:anggotas,NIM,' . $anggota->id,
+                'NAMA' => 'required',
+                'JABATAN' => 'required',
+                'DIVISI' => 'nullable|exists:divisis,id',
+            ]);
 
-    $anggotum->update($request->all());
-    return redirect()->route('anggota.index')->with('success', 'Data anggota berhasil diupdate.');
-}
+            $anggota->update($request->all());
+            return redirect()->route('anggota.index')
+                ->with('success', 'Data anggota berhasil diupdate.');
+                
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('anggota.index')
+                ->with('error', 'Anggota tidak ditemukan.');
+        }
+    }
 
-public function destroy(Anggota $anggotum)
-{
-    $anggotum->delete();
-    return redirect()->route('anggota.index')->with('success', 'Data anggota berhasil dihapus.');
-}
+    public function destroy($id)
+    {
+        try {
+            $anggota = Anggota::findOrFail($id);
+            $anggota->delete();
+            return redirect()->route('anggota.index')
+                ->with('success', 'Data anggota berhasil dihapus.');
+                
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('anggota.index')
+                ->with('error', 'Anggota tidak ditemukan.');
+        }
+    }
 }

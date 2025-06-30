@@ -453,6 +453,62 @@
             .access-card, .admin-card {
                 margin-bottom: 20px;
             }
+            /* Hero Section Buttons */
+.hero-content .btn-netflix {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.hero-content .btn-outline-netflix {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.hero-content .btn-netflix i,
+.hero-content .btn-outline-netflix i {
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .hero-content .btn-netflix,
+    .hero-content .btn-outline-netflix {
+        width: 100%;
+        justify-content: center;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+}
+
+/* Welcome Message */
+.welcome-message .content-card {
+    background: rgba(229, 9, 20, 0.1);
+    border: 2px solid var(--netflix-red);
+    border-radius: 15px;
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+.welcome-message .content-card:hover {
+    background: rgba(229, 9, 20, 0.15);
+    box-shadow: 0 10px 30px rgba(229, 9, 20, 0.2);
+}
+
+.welcome-message h3 {
+    color: var(--netflix-red);
+    font-weight: bold;
+}
+
+.welcome-message p {
+    color: var(--light-gray);
+    font-size: 1.1rem;
+}
         }
     </style>
 </head>
@@ -471,8 +527,23 @@
                     <a href="{{ route('anggota.index') }}">Anggota</a>
                     <a href="{{ route('divisi.index') }}">Divisi</a>
                     <a href="{{ route('kegiatan.index') }}">Kegiatan</a>
+                    <a href="{{ route('administrasi.index') }}">Administrasi</a>
                     <a href="{{ url('/profil') }}">Profil</a>
                     <a href="{{ url('/struktur') }}">Struktur</a>
+                        @auth
+    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+        @csrf
+        <button type="submit" class="btn btn-link nav-link" style="color: var(--light-gray);">
+            <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </button>
+    </form>
+    @endauth
+    
+    @guest
+    <a href="{{ route('login') }}">
+        <i class="fas fa-sign-in-alt me-1"></i> Login
+    </a>
+    @endguest
                 </div>
             </div>
         </div>
@@ -490,11 +561,60 @@
                             Membangun Masa Depan Digital Bersama - Tempat di mana inovasi bertemu dengan kolaborasi, 
                             dan setiap mahasiswa adalah bagian dari cerita sukses.
                         </p>
+                            <div class="mt-4">
+        @auth
+        <a href="{{ route('dashboard') }}" class="btn btn-netflix me-3">
+            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+        </a>
+        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-outline-netflix">
+                <i class="fas fa-sign-out-alt me-2"></i> Logout
+            </button>
+        </form>
+        @endauth
+        
+        @guest
+        <a href="{{ route('login') }}" class="btn btn-netflix me-3">
+            <i class="fas fa-sign-in-alt me-2"></i> Login
+        </a>
+        <a href="{{ route('register') }}" class="btn btn-outline-netflix">
+            <i class="fas fa-user-plus me-2"></i> Register
+        </a>
+        @endguest
+    </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    @auth
+<!-- Welcome Message for Logged In Users -->
+<section class="welcome-message py-5">
+    <div class="container">
+        <div class="content-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="mb-3">Selamat datang kembali, {{ auth()->user()->name }}!</h3>
+                    <p class="mb-4">Anda login sebagai anggota HMPS Sistem Informasi. Akses penuh fitur tersedia untuk Anda.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ route('dashboard') }}" class="btn btn-netflix">
+                            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                        </a>
+                        <a href="{{ route('profil') }}" class="btn btn-outline-netflix">
+                            <i class="fas fa-user-circle me-2"></i> Profil Saya
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-user-check" style="font-size: 5rem; color: var(--netflix-red);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endauth
 
     <!-- Quick Access -->
     <section class="quick-access">
@@ -546,7 +666,7 @@
             <h2 class="section-title">Administrasi & Layanan</h2>
             <div class="row">
                 <div class="col-md-3 mb-4">
-                    <div class="admin-card" onclick="window.location.href='#'">
+                    <div class="admin-card" onclick="window.location.href='{{ route('persuratan.index') }}'">
                         <i class="fas fa-file-alt"></i>
                         <h5>Dokumen</h5>
                         <p>Akses dokumen penting, formulir, dan berkas administrasi HMPS</p>
@@ -560,28 +680,28 @@
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <div class="admin-card" onclick="window.location.href='#'">
+                    <div class="admin-card" onclick="window.location.href='{{ route('kegiatan.index') }}'">
                         <i class="fas fa-chart-bar"></i>
                         <h5>Laporan</h5>
                         <p>Laporan kegiatan, pertanggungjawaban, dan progress organisasi</p>
                     </div>
                 </div>
                 <div class="col-md-3 mb-4">
-                    <div class="admin-card" onclick="window.location.href='#'">
+                    <div class="admin-card" onclick="window.location.href='{{ route('persuratan.index') }}'">
                         <i class="fas fa-envelope"></i>
                         <h5>Surat Menyurat</h5>
                         <p>Template surat resmi dan korespondensi organisasi</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <div class="admin-card" onclick="window.location.href='#'">
+                    <div class="admin-card" onclick="window.location.href='{{ route('keuangan.index') }}'">
                         <i class="fas fa-coins"></i>
                         <h5>Keuangan</h5>
                         <p>Transparansi keuangan organisasi dan laporan kas</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <div class="admin-card" onclick="window.location.href='#'">
+                    <div class="admin-card" onclick="window.location.href='{{ route('persuratan.index') }}'">
                         <i class="fas fa-archive"></i>
                         <h5>Arsip</h5>
                         <p>Penyimpanan dan pengelolaan arsip digital organisasi</p>
@@ -604,7 +724,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="26">26</span>
+                        <span class="stat-number" data-count="27">27</span>
                         <span class="stat-label">Anggota Aktif</span>
                     </div>
                 </div>
@@ -683,31 +803,39 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Greeting based on time
-        function setGreeting() {
-            const now = new Date();
-            const hour = now.getHours();
-            const greetingElement = document.getElementById('greeting');
-            
-            let greeting;
-            let icon;
-            
-            if (hour >= 5 && hour < 12) {
-                greeting = "Selamat Pagi";
-                icon = "🌅";
-            } else if (hour >= 12 && hour < 15) {
-                greeting = "Selamat Siang";
-                icon = "☀️";
-            } else if (hour >= 15 && hour < 18) {
-                greeting = "Selamat Sore";
-                icon = "🌇";
-            } else {
-                greeting = "Selamat Malam";
-                icon = "🌙";
-            }
-            
-            greetingElement.innerHTML = `${icon} ${greeting}, Keluarga HMPS SI!`;
-        }
+// Greeting based on time
+function setGreeting() {
+    const now = new Date();
+    const hour = now.getHours();
+    const greetingElement = document.getElementById('greeting');
+    
+    let greeting;
+    let icon;
+    
+    if (hour >= 5 && hour < 12) {
+        greeting = "Selamat Pagi";
+        icon = "🌅";
+    } else if (hour >= 12 && hour < 15) {
+        greeting = "Selamat Siang";
+        icon = "☀️";
+    } else if (hour >= 15 && hour < 18) {
+        greeting = "Selamat Sore";
+        icon = "🌇";
+    } else {
+        greeting = "Selamat Malam";
+        icon = "🌙";
+    }
+    
+    // Check if user is authenticated
+    const isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    
+    if (isAuthenticated) {
+        const userName = "{{ auth()->user()->name }}";
+        greetingElement.innerHTML = `${icon} ${greeting}, ${userName}!`;
+    } else {
+        greetingElement.innerHTML = `${icon} ${greeting}, Keluarga HMPS SI!`;
+    }
+}
 
         // Navbar scroll effect
         window.addEventListener('scroll', function() {

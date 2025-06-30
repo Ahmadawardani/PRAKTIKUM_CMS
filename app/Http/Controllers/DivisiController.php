@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Divisi;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DivisiController extends Controller
 {
@@ -25,33 +26,62 @@ class DivisiController extends Controller
         ]);
 
         Divisi::create($request->all());
-        return redirect()->route('divisi.index')->with('success', 'Divisi ditambahkan.');
+        return redirect()->route('divisi.index')
+            ->with('success', 'Divisi ditambahkan.');
     }
 
-    public function show(Divisi $divisi)
+    public function show($id)
     {
-        $divisi->load('anggotas');
-        return view('divisi.show', compact('divisi'));
+        try {
+            $divisi = Divisi::with('anggotas')->findOrFail($id);
+            return view('divisi.show', compact('divisi'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('divisi.index')
+                ->with('error', 'Divisi tidak ditemukan.');
+        }
     }
 
-    public function edit(Divisi $divisi)
+    public function edit($id)
     {
-        return view('divisi.edit', compact('divisi'));
+        try {
+            $divisi = Divisi::findOrFail($id);
+            return view('divisi.edit', compact('divisi'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('divisi.index')
+                ->with('error', 'Divisi tidak ditemukan.');
+        }
     }
 
-    public function update(Request $request, Divisi $divisi)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama_divisi' => 'required|unique:divisis,nama_divisi,' . $divisi->id,
-        ]);
+        try {
+            $divisi = Divisi::findOrFail($id);
+            
+            $request->validate([
+                'nama_divisi' => 'required|unique:divisis,nama_divisi,' . $divisi->id,
+            ]);
 
-        $divisi->update($request->all());
-        return redirect()->route('divisi.index')->with('success', 'Divisi diperbarui.');
+            $divisi->update($request->all());
+            return redirect()->route('divisi.index')
+                ->with('success', 'Divisi diperbarui.');
+                
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('divisi.index')
+                ->with('error', 'Divisi tidak ditemukan.');
+        }
     }
 
-    public function destroy(Divisi $divisi)
+    public function destroy($id)
     {
-        $divisi->delete();
-        return redirect()->route('divisi.index')->with('success', 'Divisi dihapus.');
+        try {
+            $divisi = Divisi::findOrFail($id);
+            $divisi->delete();
+            return redirect()->route('divisi.index')
+                ->with('success', 'Divisi dihapus.');
+                
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('divisi.index')
+                ->with('error', 'Divisi tidak ditemukan.');
+        }
     }
 }
