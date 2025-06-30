@@ -558,8 +558,8 @@
                         <div class="greeting" id="greeting"></div>
                         <h1 class="hero-title">Himpunan Mahasiswa<br>Sistem Informasi</h1>
                         <p class="hero-subtitle">
-                            Membangun Masa Depan Digital Bersama - Tempat di mana inovasi bertemu dengan kolaborasi, 
-                            dan setiap mahasiswa adalah bagian dari cerita sukses.
+                            MENGINSPIRASI BERSAMA
+                            MEMBERDAYAKAN SEMUA
                         </p>
                             <div class="mt-4">
         @auth

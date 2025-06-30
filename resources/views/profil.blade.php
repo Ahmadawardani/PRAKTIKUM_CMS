@@ -445,7 +445,7 @@
     
     <div class="hero-content">
         <div class="hero-logo">
-            <img src="{{ asset('images/logo-hmps.png') }}" alt="Logo HMPS-SI">
+            <img src="{{ asset('images/logo-hmps.jpeg') }}" alt="Logo HMPS-SI">
         </div>
         <h1 class="hero-title">HMPS-SI</h1>
         <p class="hero-subtitle">Himpunan Mahasiswa Sistem Informasi</p>
