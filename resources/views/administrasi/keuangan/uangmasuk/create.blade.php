@@ -359,7 +359,7 @@
 
 <div class="netflix-form-container">
     <h1 class="netflix-title">Tambah Uang Masuk</h1>
-    <p class="form-subtitle">✨ Catat pemasukan Anda dengan style Netflix yang memukau ✨</p>
+    <p class="form-subtitle">✨ Catat pemasukan Kas HMPS SI ✨</p>
 
     <form method="POST" action="{{ route('uangmasuk.store') }}" id="moneyForm">
         @csrf
