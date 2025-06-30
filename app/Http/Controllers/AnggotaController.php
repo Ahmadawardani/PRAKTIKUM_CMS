@@ -26,6 +26,9 @@ class AnggotaController extends Controller
             return redirect()->route('anggota.index')
                 ->with('error', 'Anggota tidak ditemukan.');
         }
+        Log::info('user registered', [
+            'time' => now()->toDateTimeString(),
+        ]);
     }
 
     public function create()
